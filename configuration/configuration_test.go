@@ -452,10 +452,12 @@ func (suite *ConfigSuite) TestParseInvalidLoglevel(c *check.C) {
 // properly override reporting parameters
 func (suite *ConfigSuite) TestParseWithDifferentEnvReporting(c *check.C) {
 	suite.expectedConfig.Reporting.Bugsnag.APIKey = "anotherBugsnagApiKey"
-	suite.expectedConfig.Reporting.Bugsnag.Endpoint = "localhost:8080"
+	suite.expectedConfig.Reporting.Bugsnag.Endpoints.Notify = "notify.localhost:8080"
+	suite.expectedConfig.Reporting.Bugsnag.Endpoints.Sessions = "sessions.localhost:8080"
 
 	os.Setenv("REGISTRY_REPORTING_BUGSNAG_APIKEY", "anotherBugsnagApiKey")
-	os.Setenv("REGISTRY_REPORTING_BUGSNAG_ENDPOINT", "localhost:8080")
+	os.Setenv("REGISTRY_REPORTING_BUGSNAG_ENDPOINTS_NOTIFY", "notify.localhost:8080")
+	os.Setenv("REGISTRY_REPORTING_BUGSNAG_ENDPOINTS_SESSIONS", "sessions.localhost:8080")
 
 	config, err := Parse(bytes.NewReader([]byte(configYamlV0_1)))
 	c.Assert(err, check.IsNil)
@@ -475,10 +477,12 @@ func (suite *ConfigSuite) TestParseInvalidVersion(c *check.C) {
 // TestParseExtraneousVars validates that environment variables referring to
 // nonexistent variables don't cause side effects.
 func (suite *ConfigSuite) TestParseExtraneousVars(c *check.C) {
-	suite.expectedConfig.Reporting.Bugsnag.Endpoint = "localhost:8080"
+	suite.expectedConfig.Reporting.Bugsnag.Endpoints.Notify = "notify.localhost:8080"
+	suite.expectedConfig.Reporting.Bugsnag.Endpoints.Sessions = "sessions.localhost:8080"
 
 	// A valid environment variable
-	os.Setenv("REGISTRY_REPORTING_BUGSNAG_ENDPOINT", "localhost:8080")
+	os.Setenv("REGISTRY_REPORTING_BUGSNAG_ENDPOINTS_NOTIFY", "notify.localhost:8080")
+	os.Setenv("REGISTRY_REPORTING_BUGSNAG_ENDPOINTS_SESSIONS", "sessions.localhost:8080")
 
 	// Environment variables which shouldn't set config items
 	os.Setenv("REGISTRY_DUCKS", "quack")
@@ -612,7 +616,7 @@ func copyConfig(config Configuration) *Configuration {
 		configCopy.Storage.setParameter(k, v)
 	}
 	configCopy.Reporting = Reporting{
-		Bugsnag: BugsnagReporting{config.Reporting.Bugsnag.APIKey, config.Reporting.Bugsnag.ReleaseStage, config.Reporting.Bugsnag.Endpoint},
+		Bugsnag: BugsnagReporting{config.Reporting.Bugsnag.APIKey, config.Reporting.Bugsnag.ReleaseStage, config.Reporting.Bugsnag.Endpoints},
 	}
 
 	configCopy.Auth = Auth{config.Auth.Type(): Parameters{}}
