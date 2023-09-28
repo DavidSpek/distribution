@@ -53,11 +53,25 @@ jobs:
         uses: cycjimmy/semantic-release-action@v4
         id: semantic_release
         with:
+          dry_run: true
+          ci: true
           extra_plugins: |
             conventional-changelog-conventionalcommits
-          dry_run: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: debug output
+        run: |
+          echo ${{ steps.semantic_release.outputs.new_release_published }}
+          echo ${{ steps.semantic_release.outputs.new_release_version }}
+          echo ${{ steps.semantic_release.outputs.new_release_major_version }}
+          echo ${{ steps.semantic_release.outputs.new_release_minor_version }}
+          echo ${{ steps.semantic_release.outputs.new_release_patch_version }}
+          echo ${{ steps.semantic_release.outputs.new_release_notes }}
+          echo ${{ steps.semantic_release.outputs.new_release_git_head }}
+          echo ${{ steps.semantic_release.outputs.new_release_git_tag }}
+          echo ${{ steps.semantic_release.outputs.last_release_version }}
+          echo ${{ steps.semantic_release.outputs.last_release_git_head }}
+          echo ${{ steps.semantic_release.outputs.last_release_git_tag }}
       - name: Docker meta
         id: meta
         if: ${{ steps.semantic_release.outputs.new_release_published }}
@@ -96,6 +110,7 @@ jobs:
       - name: Build artifacts
         uses: docker/bake-action@v4
         with:
+          provenance: false
           targets: artifact-all
       - name: Move artifacts
         run: |
@@ -117,6 +132,7 @@ jobs:
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v4
         with:
+          ci: true
           extra_plugins: |
             conventional-changelog-conventionalcommits
         env:

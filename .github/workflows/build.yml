@@ -92,6 +92,7 @@ jobs:
         uses: docker/bake-action@v4
         with:
           targets: artifact-all
+          provenance: false
       -
         name: Move artifacts
         run: |
