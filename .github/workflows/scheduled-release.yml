@@ -31,7 +31,7 @@ jobs:
               fi
           done
 
-          echo "matrix=$(printf '%s\n' "${branches[@]}" | jq -R . | jq -s .)" >> $GITHUB_OUTPUT
+          echo "matrix=$(printf '%s\n' "${branches[@]}" | jq -R . | jq -s . | jq -c .)" >> $GITHUB_OUTPUT
     outputs:
       matrix: ${{ steps.generate-matrix.outputs.matrix }}
   run-release:
