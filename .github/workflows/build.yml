@@ -125,6 +125,7 @@ jobs:
         id: semantic_release
         with:
           dry_run: true
+          ci: false
           semantic_version: 22.0.5
           extra_plugins: |
             conventional-changelog-conventionalcommits
