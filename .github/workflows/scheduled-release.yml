@@ -23,10 +23,6 @@ jobs:
           branches=('main' 'alpha' 'beta' 'rc')
           regex='^([0-9])?(\.([0-9]|x))?\.x$' # matches branches like 1.x or 2.0.x
 
-          for branch in $(git for-each-ref --format='%(refname)' refs/remotes/origin/); do
-              echo $branch
-          done
-
           for branch in $(git for-each-ref --format='%(refname)' refs/remotes/origin/ | cut -d/ -f4-); do
               if [[ $branch =~ $regex ]]; then
                   branches+=("$branch")
@@ -36,15 +32,15 @@ jobs:
           echo "matrix=$(printf '%s\n' "${branches[@]}" | jq -R . | jq -s . | jq '{branch: .}' | jq -c .)" >> $GITHUB_OUTPUT
     outputs:
       matrix: ${{ steps.generate-matrix.outputs.matrix }}
-  # run-release:
-  #   needs: build-branch-matrix
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     fail-fast: false
-  #     matrix: ${{ fromJson(needs.build-branch-matrix.outputs.matrix) }}
-  #   steps:
-  #   - name: Invoke workflow without inputs
-  #     uses: benc-uk/workflow-dispatch@v1
-  #     with:
-  #       workflow: release
-  #       ref: ${{ matrix.branch }}
+  run-release:
+    needs: build-branch-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.build-branch-matrix.outputs.matrix) }}
+    steps:
+    - name: Invoke workflow without inputs
+      uses: benc-uk/workflow-dispatch@v1
+      with:
+        workflow: release
+        ref: ${{ matrix.branch }}
