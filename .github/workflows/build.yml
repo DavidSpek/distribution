@@ -46,8 +46,8 @@ jobs:
 
   build:
     permissions:
-      id-token: 'write' # to write to GHCR
-      packages: 'write' # to write to GHCR
+      id-token: write # to write to GHCR
+      packages: write # to write to GHCR
 
     runs-on: ubuntu-latest
     needs:
@@ -64,7 +64,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ${{ env.DOCKERHUB_SLUG }}
+            ${{ env.GHCR_SLUG }}
           ### push on PRs and main
           # ghcr.io/distribution/distribution:pr<number>
           # ghcr.io/distribution/distribution:sha<sha>
@@ -113,3 +113,18 @@ jobs:
             ${{ steps.meta.outputs.bake-file }}
           targets: image-all
           push: true
+  check-release: # make sure commits are valid for a target branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v4
+        id: semantic_release
+        with:
+          dry_run: true
+          semantic_version: 22.0.5
+          extra_plugins: |
+            conventional-changelog-conventionalcommits
