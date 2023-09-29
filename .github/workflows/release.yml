@@ -1,11 +1,6 @@
 name: release
 
 on:
-  # workflow_call:
-  #   inputs:
-  #     branch:
-  #       required: true
-  #       type: string
   workflow_dispatch:
 
 env:
