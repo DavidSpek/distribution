@@ -1,13 +1,9 @@
-name: release
+name: scheduled release
 
 on:
   schedule:
     - cron:  '0 0 1 * *' # run release monthly
   workflow_dispatch: # allow a release to be triggered manually
-
-env:
-  GHCR_SLUG: ghcr.io/${{ github.repository_owner }}/distribution
-  DOCKERHUB_SLUG: distribution/distribution
 
 permissions: # Needed so the reusable workflow has the permissions it needs
   contents: write # to create GitHub release (cycjimmy/semantic-release-action)
