@@ -36,9 +36,16 @@ jobs:
       matrix: ${{ steps.generate-matrix.outputs.matrix }}
   run-release:
     needs: build-branch-matrix
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.build-branch-matrix.outputs.matrix) }}
-    uses: ./.github/workflows/release.yml
-    with:
-      branch: ${{ matrix.branch }}
+    # uses: ./.github/workflows/release.yml
+    # with:
+    #   branch: ${{ matrix.branch }}
+    steps:
+    - name: Invoke workflow without inputs
+      uses: benc-uk/workflow-dispatch@v1
+      with:
+        workflow: release
+        ref: ${{ matrix.branch }}
