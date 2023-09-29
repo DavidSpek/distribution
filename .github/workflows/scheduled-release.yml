@@ -5,10 +5,8 @@ on:
     - cron:  '0 0 1 * *' # run release monthly
   workflow_dispatch: # allow a release to be triggered manually
 
-permissions: # Needed so the reusable workflow has the permissions it needs
-  contents: write # to create GitHub release (cycjimmy/semantic-release-action)
-  id-token: write # to write to GHCR
-  packages: write # to write to GHCR
+permissions:
+  actions: write # needed to trigger other workflows
 
 jobs:
   build-branch-matrix:
@@ -36,9 +34,16 @@ jobs:
       matrix: ${{ steps.generate-matrix.outputs.matrix }}
   run-release:
     needs: build-branch-matrix
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.build-branch-matrix.outputs.matrix) }}
-    uses: ./.github/workflows/release.yml
-    with:
-      branch: ${{ matrix.branch }}
+    # uses: ./.github/workflows/release.yml
+    # with:
+    #   branch: ${{ matrix.branch }}
+    steps:
+    - name: Invoke workflow without inputs
+      uses: benc-uk/workflow-dispatch@v1
+      with:
+        workflow: release
+        ref: ${{ matrix.branch }}
