@@ -125,7 +125,7 @@ jobs:
       - name: temporarily merge PR branch
         run: |
           git config --global user.name github-actions
-          git config --global user.email
+          git config --global user.email github-actions@github.com
           git merge ${{ github.event.pull_request.head.ref }}
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v4
