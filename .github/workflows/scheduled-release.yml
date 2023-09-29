@@ -31,7 +31,7 @@ jobs:
               fi
           done
 
-          echo "matrix=$(printf '%s\n' "${branches[@]}" | jq -R . | jq -s . | jq -c .)" >> $GITHUB_OUTPUT
+          echo "matrix=$(printf '%s\n' "${branches[@]}" | jq -R . | jq -s . | jq '{branch: .}' | jq -c .)" >> $GITHUB_OUTPUT
     outputs:
       matrix: ${{ steps.generate-matrix.outputs.matrix }}
   run-release:
@@ -41,4 +41,4 @@ jobs:
       matrix: ${{ fromJson(needs.build-branch-matrix.outputs.matrix) }}
     uses: ./.github/workflows/release.yml
     with:
-      branch: ${{ matrix.value }}
+      branch: ${{ matrix.branch }}
