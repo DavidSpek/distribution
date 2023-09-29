@@ -12,3 +12,4 @@ for branch in $(git for-each-ref --format='%(refname)' refs/remotes/origin/ | cu
 done
 
 printf '%s\n' "${branches[@]}" | jq -R . | jq -s . | jq '{branch: .}' | jq -c .
+ echo "done"
