@@ -1,9 +1,12 @@
 name: release
 
 on:
-  schedule:
-    - cron:  '0 0 1 * *' # run release monthly
-  workflow_dispatch: # allow a release to be triggered manually
+  # workflow_call:
+  #   inputs:
+  #     branch:
+  #       required: true
+  #       type: string
+  workflow_dispatch:
 
 env:
   GHCR_SLUG: ghcr.io/${{ github.repository_owner }}/distribution
