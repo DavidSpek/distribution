@@ -122,14 +122,17 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.base.ref }}
-      - name: show commit message
-        run: |
-          git log --oneline --no-decorate --no-color --pretty=format:"%s" -1
-      # - name: temporarily merge PR branch
+      # - name: show commit message
       #   run: |
-      #     git config --global user.name github-actions
-      #     git config --global user.email github-actions@github.com
-      #     git merge origin/${{ github.event.pull_request.head.ref }}
+      #     git log --oneline --no-decorate --no-color --pretty=format:"%s" -1
+      - name: temporarily merge PR branch
+        run: |
+          git config --global user.name github-actions
+          git config --global user.email github-actions@github.com
+          git merge origin/${{ github.event.pull_request.head.ref }}
+          unset GITHUB_EVENT_PATH
+          unset GITHUB_ACTIONS
+          unset GITHUB_EVENT_NAME
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v4
         id: semantic_release
