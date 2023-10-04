@@ -128,11 +128,11 @@ jobs:
           node-version: 20
       - name: install semantic release
         run: npm install -g semantic-release@22.0.5 conventional-changelog-conventionalcommits@7.0.2
-      - name: temporarily merge PR branch
-        run: |
-          git config --global user.name github-actions
-          git config --global user.email github-actions@github.com
-          git merge origin/${{ github.event.pull_request.head.ref }}
+      # - name: temporarily merge PR branch
+      #   run: |
+      #     git config --global user.name github-actions
+      #     git config --global user.email github-actions@github.com
+      #     git merge origin/${{ github.event.pull_request.head.ref }}
       - name: semantic release dry run
         run: |
           unset GITHUB_EVENT_PATH
