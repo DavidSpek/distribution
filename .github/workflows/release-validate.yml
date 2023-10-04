@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: read # to fetch code (actions/checkout)
+  pull-requests: read # to fetch PR title (amannn/action-semantic-pull-request)
 
 jobs:
   validate-pr-title:
