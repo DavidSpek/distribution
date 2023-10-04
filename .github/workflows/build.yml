@@ -131,9 +131,8 @@ jobs:
         uses: cycjimmy/semantic-release-action@v4
         id: semantic_release
         with:
-          branch: ${{ github.event.pull_request.base.ref }}
           dry_run: true
-          ci: false
+          ci: true
           semantic_version: 22.0.5
           extra_plugins: |
             conventional-changelog-conventionalcommits
