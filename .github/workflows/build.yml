@@ -122,35 +122,44 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.base.ref }}
-      # - name: show commit message
-      #   run: |
-      #     git log --oneline --no-decorate --no-color --pretty=format:"%s" -1
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - name: install semantic release
+        run: npm install -g semantic-release@22.0.5 conventional-changelog-conventionalcommits@7.0.2
       - name: temporarily merge PR branch
         run: |
           git config --global user.name github-actions
           git config --global user.email github-actions@github.com
           git merge origin/${{ github.event.pull_request.head.ref }}
-      - name: test unsetting vars
+      - name: semantic release dry run
         run: |
-          echo $GITHUB_EVENT_PATH
-          echo $GITHUB_ACTIONS
-          echo $GITHUB_EVENT_NAME
-      - name: test unsetting vars
-        run: |
-          unset GITHUB_EVENT_PATH && echo $GITHUB_EVENT_PATH
-          unset GITHUB_ACTIONS && echo $GITHUB_ACTIONS
-          unset GITHUB_EVENT_NAME && echo $GITHUB_EVENT_NAME
-      - name: test unsetting vars
-        run: |
-          echo $GITHUB_EVENT_PATH
-          echo $GITHUB_ACTIONS
-          echo $GITHUB_EVENT_NAME
-      - name: Semantic Release
-        uses: cycjimmy/semantic-release-action@v4
-        id: semantic_release
-        with:
-          dry_run: true
-          ci: false
-          semantic_version: 22.0.5
-          extra_plugins: |
-            conventional-changelog-conventionalcommits
+          unset GITHUB_EVENT_PATH
+          unset GITHUB_ACTIONS
+          unset GITHUB_EVENT_NAME
+          semantic-release --dry-run --ci false --semantic-version 22.0.5
+      # - name: test unsetting vars
+      #   run: |
+      #     echo $GITHUB_EVENT_PATH
+      #     echo $GITHUB_ACTIONS
+      #     echo $GITHUB_EVENT_NAME
+      # - name: test unsetting vars
+      #   run: |
+      #     unset GITHUB_EVENT_PATH && echo $GITHUB_EVENT_PATH
+      #     unset GITHUB_ACTIONS && echo $GITHUB_ACTIONS
+      #     unset GITHUB_EVENT_NAME && echo $GITHUB_EVENT_NAME
+      # - name: test unsetting vars
+      #   run: |
+      #     echo $GITHUB_EVENT_PATH
+      #     echo $GITHUB_ACTIONS
+      #     echo $GITHUB_EVENT_NAME
+      # - name: Semantic Release
+      #   uses: cycjimmy/semantic-release-action@v4
+      #   id: semantic_release
+      #   with:
+      #     dry_run: true
+      #     ci: false
+      #     semantic_version: 22.0.5
+      #     extra_plugins: |
+      #       conventional-changelog-conventionalcommits
