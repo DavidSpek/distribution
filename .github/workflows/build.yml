@@ -116,6 +116,8 @@ jobs:
   check-release: # make sure commits are valid for a target branch
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
