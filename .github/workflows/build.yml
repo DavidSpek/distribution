@@ -117,7 +117,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     permissions:
-      contents: write
+      contents: write # needed since semantic release checks this permission even in dry-run mode
     steps:
       - name: Checkout
         uses: actions/checkout@v4
