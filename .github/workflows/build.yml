@@ -132,9 +132,19 @@ jobs:
           git merge origin/${{ github.event.pull_request.head.ref }}
       - name: test unsetting vars
         run: |
+          echo $GITHUB_EVENT_PATH
+          echo $GITHUB_ACTIONS
+          echo $GITHUB_EVENT_NAME
+      - name: test unsetting vars
+        run: |
           unset GITHUB_EVENT_PATH && echo $GITHUB_EVENT_PATH
           unset GITHUB_ACTIONS && echo $GITHUB_ACTIONS
           unset GITHUB_EVENT_NAME && echo $GITHUB_EVENT_NAME
+      - name: test unsetting vars
+        run: |
+          echo $GITHUB_EVENT_PATH
+          echo $GITHUB_ACTIONS
+          echo $GITHUB_EVENT_NAME
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v4
         id: semantic_release
